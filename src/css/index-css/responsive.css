@@ -1,0 +1,336 @@
+@media (max-width: 1024px) {
+    .hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero p {
+        font-size: 1.3rem;
+    }
+
+    .get-started-btn {
+        padding: 14px 40px;
+        font-size: 1.1rem;
+    }
+
+    .scroll-down {
+        bottom: 2.5rem;
+    }
+
+    .guide-section h2 {
+        font-size: 2.8rem;
+    }
+
+    .guide-content h3 {
+        font-size: 2rem;
+    }
+
+    .egg-types-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.8rem 1.5rem;
+    }
+
+    .navbar .logo {
+        font-size: 1.4rem;
+    }
+
+    .navbar .logo::before {
+        font-size: 1.6rem;
+    }
+
+    .nav-links {
+        gap: 1.5rem;
+    }
+
+    .navbar a {
+        font-size: 0.9rem;
+    }
+
+    .hero {
+        padding: 3rem 1.5rem;
+        min-height: 80vh;
+    }
+
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+
+    .get-started-btn {
+        padding: 12px 36px;
+        font-size: 1rem;
+    }
+
+    .scroll-down {
+        bottom: 2rem;
+        font-size: 0.9rem;
+    }
+
+    .scroll-down::after {
+        font-size: 1.2rem;
+    }
+
+    .guide-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .guide-section h2 {
+        font-size: 2.2rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .guide-section h2::after {
+        width: 80px;
+        height: 4px;
+    }
+
+    .guide-content h3 {
+        font-size: 1.8rem;
+        margin: 2.5rem 0 1rem;
+    }
+
+    .guide-content p {
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+
+    .guide-content ol {
+        padding-left: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .guide-content ol li {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .egg-types-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    .egg-type {
+        padding: 1.5rem;
+    }
+
+    .egg-type h4 {
+        font-size: 1.4rem;
+    }
+
+    .egg-type p {
+        font-size: 0.95rem;
+    }
+
+    .egg-type ul li {
+        font-size: 0.95rem;
+        padding-left: 1.5rem;
+    }
+
+    .tips {
+        padding: 2rem;
+        margin-top: 2.5rem;
+    }
+
+    .tips h4 {
+        font-size: 1.4rem;
+    }
+
+    .tips ul li {
+        font-size: 0.95rem;
+        padding-left: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.6rem 1rem;
+    }
+
+    .navbar .logo {
+        font-size: 1.2rem;
+    }
+
+    .navbar .logo::before {
+        font-size: 1.4rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .navbar a {
+        font-size: 0.85rem;
+    }
+
+    .hero {
+        padding: 2.5rem 1rem;
+        min-height: 70vh;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .get-started-btn {
+        padding: 10px 30px;
+        font-size: 0.9rem;
+    }
+
+    .scroll-down {
+        bottom: 1.5rem;
+        font-size: 0.85rem;
+    }
+
+    .scroll-down::after {
+        font-size: 1rem;
+    }
+
+    .guide-section {
+        padding: 3rem 1rem;
+    }
+
+    .guide-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .guide-section h2::after {
+        width: 60px;
+        height: 3px;
+    }
+
+    .guide-content h3 {
+        font-size: 1.5rem;
+        margin: 2rem 0 0.8rem;
+    }
+
+    .guide-content p {
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+    .guide-content ol {
+        padding-left: 1.2rem;
+        margin: 1rem 0;
+    }
+
+    .guide-content ol li {
+        font-size: 0.95rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .egg-types-grid {
+        gap: 1rem;
+    }
+
+    .egg-type {
+        padding: 1.2rem;
+    }
+
+    .egg-type h4 {
+        font-size: 1.3rem;
+    }
+
+    .egg-type p {
+        font-size: 0.9rem;
+    }
+
+    .egg-type ul li {
+        font-size: 0.9rem;
+        padding-left: 1.3rem;
+    }
+
+    .tips {
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .tips h4 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .tips ul li {
+        font-size: 0.9rem;
+        padding-left: 1.5rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .navbar {
+        padding: 0.5rem 0.8rem;
+    }
+
+    .navbar .logo {
+        font-size: 1.1rem;
+    }
+
+    .navbar .logo::before {
+        font-size: 1.2rem;
+    }
+
+    .nav-links {
+        gap: 0.8rem;
+    }
+
+    .navbar a {
+        font-size: 0.8rem;
+    }
+
+    .hero {
+        padding: 2rem 0.8rem;
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero p {
+        font-size: 0.9rem;
+    }
+
+    .get-started-btn {
+        padding: 8px 24px;
+        font-size: 0.85rem;
+    }
+
+    .scroll-down {
+        bottom: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .guide-section {
+        padding: 2.5rem 0.8rem;
+    }
+
+    .guide-section h2 {
+        font-size: 1.6rem;
+    }
+
+    .guide-content h3 {
+        font-size: 1.4rem;
+    }
+
+    .egg-type h4 {
+        font-size: 1.2rem;
+    }
+
+    .tips h4 {
+        font-size: 1.2rem;
+    }
+}
