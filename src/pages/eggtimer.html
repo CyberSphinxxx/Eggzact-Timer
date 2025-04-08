@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eggquisite Timer</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #ffe1bc 0%, #ffcfd2 50%, #f3d4ff 100%);
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .background-effects {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            animation: float 10s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh); }
+            100% { transform: translateY(-100vh); }
+        }
+
+        .timer-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+            margin: 2rem;
+            position: relative;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-sizing: border-box;
+        }
+
+        .timer-header {
+            text-align: center;
+            color: #4a4e69;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer-display {
+            font-size: 3.5rem;
+            text-align: center;
+            color: #22223b;
+            margin: 1rem 0;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #9a8c98, #4a4e69);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-ring {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            display: block;
+            position: relative;
+        }
+
+        .progress-ring__circle {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: #f2e9e4;
+            stroke-width: 10;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .progress-ring__progress {
+            stroke: url(#progressGradient);
+            stroke-width: 10;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.35s;
+            fill: none;
+        }
+
+        .egg-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .egg-icon::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 30%;
+            width: 20px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+
+        .egg-icon.cook {
+            transform: translate(-50%, -50%) rotate(10deg);
+        }
+
+        .controls, .presets, .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 1rem 0;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .start-btn { background: #95e1d3; }
+        .pause-btn { background: #fce38a; }
+        .reset-btn { background: #f38181; }
+        .preset-btn { background: #c8b6ff; }
+        .feature-btn { background: #b8d8d8; }
+
+        .settings-panel {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(242, 233, 228, 0.7);
+            border-radius: 15px;
+        }
+
+        .settings-panel label {
+            display: block;
+            margin: 5px 0;
+        }
+
+        .settings-panel select, .settings-panel input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        .settings-panel .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .settings-panel .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .history-panel {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(242, 233, 228, 0.7);
+            border-radius: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .history-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .history-panel li {
+            padding: 5px 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .history-panel li:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-effects">
+        <div class="bubble" style="width: 20px; height: 20px; left: 10%; animation-delay: 0s;"></div>
+        <div class="bubble" style="width: 30px; height: 30px; left: 30%; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 25px; height: 25px; left: 70%; animation-delay: 4s;"></div>
+    </div>
+
+    <div class="timer-container">
+        <h2 class="timer-header">Eggquisite Timer</h2>
+        <div class="timer-display">00:00</div>
+        
+        <div class="progress-ring">
+            <svg style="width: 100%; height: 100%;">
+                <defs>
+                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color: #95e1d3" />
+                        <stop offset="100%" style="stop-color: #c8b6ff" />
+                    </linearGradient>
+                </defs>
+                <circle class="progress-ring__circle" cx="75" cy="75" r="65"></circle>
+                <circle class="progress-ring__progress" cx="75" cy="75" r="65" stroke-dasharray="408.41" stroke-dashoffset="408.41"></circle>
+            </svg>
+            <div class="egg-icon"></div>
+        </div>
+
+        <div class="controls">
+            <button class="start-btn">Start</button>
+            <button class="pause-btn">Pause</button>
+            <button class="reset-btn">Reset</button>
+        </div>
+
+        <div class="presets">
+            <button class="preset-btn" data-time="180">Soft (3m)</button>
+            <button class="preset-btn" data-time="360">Medium (6m)</button>
+            <button class="preset-btn" data-time="600">Hard (10m)</button>
+        </div>
+
+        <div class="features">
+            <button class="feature-btn" onclick="toggleDarkMode()">Dark Mode</button>
+            <button class="feature-btn" onclick="saveTime()">Save Time</button>
+            <button class="feature-btn" onclick="loadSavedTimes()">Load Times</button>
+        </div>
+
+        <div class="settings-panel">
+            <div>
+                <label>Alarm Sound:</label>
+                <select id="alarmSound">
+                    <option value="beep">Classic Beep</option>
+                    <option value="bell">Bell Ring</option>
+                    <option value="chirp">Bird Chirp</option>
+                </select>
+            </div>
+            <div>
+                <label>Custom Time (min):</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="customTime" min="1" placeholder="Enter minutes">
+                    <button class="feature-btn" onclick="setCustomTime()">Set</button>
+                </div>
+            </div>
+            <div>
+                <label>Timer Speed:</label>
+                <select id="timerSpeed">
+                    <option value="1">Normal (1x)</option>
+                    <option value="0.5">Slow (0.5x)</option>
+                    <option value="2">Fast (2x)</option>
+                </select>
+            </div>
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="vibrate" checked> Vibrate</label>
+                <label><input type="checkbox" id="autoReset"> Auto Reset</label>
+                <label><input type="checkbox" id="countUp"> Count Up</label>
+                <label><input type="checkbox" id="eggAnimation" checked> Egg Animation</label>
+            </div>
+        </div>
+
+        <div class="history-panel">
+            <label>Timer History:</label>
+            <ul id="timerHistory"></ul>
+        </div>
+    </div>
+
+    <script>
+        const timerDisplay = document.querySelector('.timer-display');
+        const startBtn = document.querySelector('.start-btn');
+        const pauseBtn = document.querySelector('.pause-btn');
+        const resetBtn = document.querySelector('.reset-btn');
+        const presetBtns = document.querySelectorAll('.preset-btn');
+        const progressCircle = document.querySelector('.progress-ring__progress');
+        const eggIcon = document.querySelector('.egg-icon');
+        const historyList = document.querySelector('#timerHistory');
+        
+        let timeLeft = 0;
+        let totalTime = 0;
+        let timer = null;
+        let isRunning = false;
+        let savedTimes = JSON.parse(localStorage.getItem('eggTimes')) || [];
+        let history = JSON.parse(localStorage.getItem('eggHistory')) || [];
+
+        const sounds = {
+            beep: new Audio('https://www.soundjay.com/buttons/beep-01a.mp3'),
+            bell: new Audio('https://www.soundjay.com/misc/bell-ringing-01.mp3'),
+            chirp: new Audio('https://www.soundjay.com/nature/bird-chirp-01.mp3')
+        };
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            return `${mins}:${secs}`;
+        }
+
+        function updateDisplay() {
+            timerDisplay.textContent = formatTime(timeLeft);
+            const circumference = 408.41;
+            const offset = document.getElementById('countUp').checked 
+                ? circumference * (1 - (timeLeft / totalTime))
+                : circumference * (timeLeft / totalTime);
+            progressCircle.style.strokeDashoffset = offset;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                if (timeLeft === 0 && document.getElementById('countUp').checked) {
+                    timeLeft = 0;
+                    totalTime = Infinity;
+                }
+                if (timeLeft >= 0) {
+                    isRunning = true;
+                    const speed = parseFloat(document.getElementById('timerSpeed').value);
+                    timer = setInterval(() => {
+                        document.getElementById('countUp').checked ? timeLeft++ : timeLeft--;
+                        updateDisplay();
+                        if (document.getElementById('eggAnimation').checked) {
+                            eggIcon.classList.toggle('cook');
+                        }
+                        if (!document.getElementById('countUp').checked && timeLeft <= 0) {
+                            clearInterval(timer);
+                            isRunning = false;
+                            playAlarm();
+                            addToHistory(totalTime);
+                            if (document.getElementById('autoReset').checked) resetTimer();
+                        }
+                    }, 1000 / speed);
+                }
+            }
+        }
+
+        function pauseTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            eggIcon.classList.remove('cook');
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            timeLeft = 0;
+            totalTime = 0;
+            updateDisplay();
+            progressCircle.style.strokeDashoffset = 408.41;
+            eggIcon.classList.remove('cook');
+        }
+
+        function setTime(seconds) {
+            timeLeft = seconds;
+            totalTime = seconds;
+            updateDisplay();
+        }
+
+        function playAlarm() {
+            const selectedSound = document.getElementById('alarmSound').value;
+            sounds[selectedSound].play();
+            if (document.getElementById('vibrate').checked && 'vibrate' in navigator) {
+                navigator.vibrate([200, 100, 200]);
+            }
+            timerDisplay.style.animation = 'pulse 1s 2';
+            setTimeout(() => timerDisplay.style.animation = '', 2000);
+        }
+
+        function setCustomTime() {
+            const minutes = parseInt(document.getElementById('customTime').value);
+            if (minutes && !isNaN(minutes)) setTime(minutes * 60);
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            document.body.style.background = isDark 
+                ? 'linear-gradient(45deg, #2b2d42, #8d5524, #4a4e69)'
+                : 'linear-gradient(45deg, #ffe1bc 0%, #ffcfd2 50%, #f3d4ff 100%)';
+            document.querySelector('.timer-container').style.background = isDark 
+                ? 'rgba(43, 45, 66, 0.9)'
+                : 'rgba(255, 255, 255, 0.9)';
+        }
+
+        function saveTime() {
+            if (totalTime > 0) {
+                savedTimes.push(totalTime);
+                localStorage.setItem('eggTimes', JSON.stringify(savedTimes));
+                alert('Time saved!');
+            }
+        }
+
+        function loadSavedTimes() {
+            if (savedTimes.length > 0) {
+                const time = savedTimes[savedTimes.length - 1];
+                setTime(time);
+                alert(`Loaded ${formatTime(time)}`);
+            } else {
+                alert('No saved times available');
+            }
+        }
+
+        function addToHistory(time) {
+            history.unshift({ time, date: new Date().toLocaleString() });
+            if (history.length > 5) history.pop();
+            localStorage.setItem('eggHistory', JSON.stringify(history));
+            updateHistory();
+        }
+
+        function updateHistory() {
+            historyList.innerHTML = '';
+            history.forEach((entry, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${formatTime(entry.time)} - ${entry.date}`;
+                li.addEventListener('click', () => setTime(entry.time));
+                historyList.appendChild(li);
+            });
+        }
+
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (!isRunning) {
+                    const time = parseInt(btn.dataset.time);
+                    setTime(time);
+                }
+            });
+        });
+
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+        updateDisplay();
+        updateHistory();
+    </script>
+</body>
+</html>
